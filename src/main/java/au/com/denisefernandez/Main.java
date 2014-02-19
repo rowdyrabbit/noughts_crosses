@@ -16,6 +16,7 @@ public class Main {
         addPlayersToGame();
         out.println(game.getCurrentGameState());
         while(game.isRunning()) {
+            out.println(game.getCurrentPlayerName() + ", please enter your next move in the format x,y");
             executeNextMove();
             out.println(game.getCurrentGameState());
         }
@@ -23,7 +24,6 @@ public class Main {
     }
 
     private static void executeNextMove() {
-        out.println(game.getCurrentPlayerName() + ", please enter your next move in the format x,y");
         Move move = parseMove();
         try {
             game.execute(move);
