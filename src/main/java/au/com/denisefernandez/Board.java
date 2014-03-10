@@ -5,11 +5,16 @@ import java.util.Arrays;
 
 public class Board {
 
-    private static final int SIZE = 3;
+    //the length and width of the board
+    private static final int BOARD_SIZE = 3;
 
-    private BoardSymbol[][] board = new BoardSymbol[SIZE][SIZE];
+    public static final int MAX_MOVES = BOARD_SIZE * BOARD_SIZE;
+
+    //2D array representing a tic tac toe board
+    private BoardSymbol[][] board = new BoardSymbol[BOARD_SIZE][BOARD_SIZE];
 
     public Board() {
+        //initializes the board state
         fillBoardWithEmptySymbols();
     }
 
@@ -26,16 +31,16 @@ public class Board {
     }
 
     public boolean isWinningMove(Player player, int x, int y) {
-        BoardSymbol symbol = player.getSymbol();
+        Board.BoardSymbol symbol = player.getSymbol();
         board[x][y] = symbol;
-        //check whether this player is a winner
 
+        //check whether this player is a winner
         int horizontalCount = 0;
         int verticalCount = 0;
         int forwardDiagonalCount = 0;
         int backwardDiagonalCount = 0;
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             if (board[i][y] == symbol) {
                horizontalCount++;
             }
@@ -45,11 +50,11 @@ public class Board {
             if (board[i][i] == symbol) {
                 forwardDiagonalCount++;
             }
-            if (board[i][SIZE - 1 - i] == symbol) {
+            if (board[i][BOARD_SIZE - 1 - i] == symbol) {
                 backwardDiagonalCount++;
             }
         }
-
+        //if there are 3 of the same symbols in any of the possible winning directions, then we have a winner
         if (horizontalCount == 3 || verticalCount == 3 || forwardDiagonalCount == 3 || backwardDiagonalCount == 3) {
             return true;
         } else {
@@ -82,6 +87,16 @@ public class Board {
 
     private boolean isSquareEmpty(int x, int y) {
         return BoardSymbol.Empty == board[x][y];
+    }
+
+    public enum BoardSymbol {
+        X, O, Empty {
+            @Override
+            public String toString() {
+                return " ";
+            }
+        }
+
     }
 
     public class InvalidMoveException extends RuntimeException {

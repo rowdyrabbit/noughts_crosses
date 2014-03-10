@@ -5,36 +5,44 @@ import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class Main {
+public class TicTacToe {
 
     private static final Scanner in = new Scanner(System.in);
     private static final PrintStream out = System.out;
-    private static final Game game = new Game();
+
+    public TicTacToe() {
+        final Game game = new Game();
+        out.println("*** TIC TAC TOE ***");
+        game.addPlayers(getPlayersForGame());
+        startGameLoop(game);
+    }
 
     public static void main(String[] args) {
-        out.println("*** NOUGHTS AND CROSSES ***");
-        addPlayersToGame();
-        out.println(game.getCurrentGameState());
+        new TicTacToe();
+    }
+
+    private void startGameLoop(Game game) {
+        out.println(game);
         while(game.isRunning()) {
             out.println(game.getCurrentPlayerName() + ", please enter your next move in the format x,y");
-            executeNextMove();
-            out.println(game.getCurrentGameState());
+            getNextMove(game);
+            out.println(game);
         }
         out.println(game.getResult());
     }
 
-    private static void executeNextMove() {
+    private void getNextMove(Game game) {
         Move move = parseMove();
         try {
             game.execute(move);
-        } catch(Board.InvalidMoveException im) {
-            out.println(im.getMessage());
-        } catch(Board.PositionAlreadyTakenException pt) {
-            out.println(pt.getMessage());
+        } catch(Board.InvalidMoveException invalidMove) {
+            out.println(invalidMove.getMessage());
+        } catch(Board.PositionAlreadyTakenException positionTaken) {
+            out.println(positionTaken.getMessage());
         }
     }
 
-    private static Move parseMove() {
+    private Move parseMove() {
         String coordinate = in.next().trim();
         StringTokenizer st = new StringTokenizer(coordinate, ",");
 
@@ -46,11 +54,14 @@ public class Main {
         }
     }
 
-    private static void addPlayersToGame() {
+    private Player[] getPlayersForGame() {
+        Player[] players = new Player[2];
         out.println("Please enter the name of Player 1 [O]: ");
         String player1Name = in.nextLine();
         out.println("Please enter the name of Player 2 [X]: ");
         String player2Name = in.nextLine();
-        game.addPlayers(player1Name, player2Name);
+        players[0] = new Player(player1Name, Board.BoardSymbol.O);
+        players[1] = new Player(player2Name, Board.BoardSymbol.X);
+        return players;
     }
 }
