@@ -1,68 +1,50 @@
 package au.com.denisefernandez;
 
-public class Game {
 
-    private Player[] players;
-    private int currentPlayer;
-    private Board board = new Board();
-    private int numberOfMoves = 0;
-    private Player winner = null;
+public interface Game {
+
+    /**
+     * Determines whether the game is still in progress
+     *
+     * @return true if the game is still running, false otherwise
+     */
+    public boolean isRunning();
+
+    /**
+     * Returns the name of the current player
+     *
+     * @return the name of the current player
+     */
+    public String getCurrentPlayerName();
 
 
-    public void addPlayers(Player[] players) {
-        this.players = players;
-        currentPlayer = 0;  //The index of player 1 in the Players array
-    }
+    /**
+     * Returns the current player object
+     *
+     * @return the current player
+     */
+    public Player getCurrentPlayer();
 
-    public boolean isRunning() {
-        return numberOfMoves < Board.MAX_MOVES && winner == null;
-    }
+    /**
+     * Executes the move
+     *
+     * @param move the coordinates of the move to make
+     */
+    public void execute(Move move);
 
-    public String getCurrentPlayerName() {
-        return players[currentPlayer].getName();
-    }
+    /**
+     * Executes a computer move
+     */
+    public void executeComputerMove();
 
-    public void execute(Move move) {
-        final int x = move.getX();
-        final int y = move.getY();
-        if (board.isValidMove(x, y)) {
-            numberOfMoves++;
-            if (board.isWinningMove(getCurrentPlayer(), x, y)) {
-                winner = getCurrentPlayer();
-            } else {
-                swapPlayers();
-            }
-        }
-    }
-
-    public String getResult() {
-        if (numberOfMoves >= 9 && winner == null) {
-            return "GAME OVER!! It was a draw!";
-        } else if (winner != null) {
-            return "GAME OVER!! "+winner.getName() + " (with the " + winner.getSymbol() + " symbol) was the winner this time!";
-        } else {
-            return "The game isn't over yet, keep playing!";
-        }
-    }
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(board.toString());
-        builder.append("Player 1: ");
-        builder.append(players[0].toString());
-        builder.append("\n");
-        builder.append("Player 2: ");
-        builder.append(players[1].toString());
-        builder.append("\n\n");
-        return builder.toString();
-    }
-
-    private void swapPlayers() {
-        currentPlayer = currentPlayer == 0 ? 1 : 0;
-    }
-
-    private Player getCurrentPlayer() {
-        return players[currentPlayer];
-    }
-
+    /**
+     * Returns a message with the game's current state, it can be one of the following
+     * - The game was a draw
+     * - The game was won by a player
+     * - The game is still underway
+     *
+     *
+     * @return a String representing a message format of the game's current state
+     */
+    public String getGameState();
 }
