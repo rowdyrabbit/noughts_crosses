@@ -37,7 +37,7 @@ public class TicTacToeGameTest {
     @Test
     public void currentPlayerNameShouldBeSecondPlayerInListAfterFirstPlayerHasHadTheirTurn() {
         when(board.isValidMove(any(Move.class))).thenReturn(true);
-        when(board.isWinningMove(anyString(), any(Move.class))).thenReturn(false);
+        when(board.makeMove(anyString(), any(Move.class))).thenReturn(false);
 
         ticTacToe.execute(new Move(0, 0));
 
@@ -73,6 +73,6 @@ public class TicTacToeGameTest {
         ticTacToe.execute(move);
 
         verify(board).isValidMove(eq(move));
-        verify(board).isWinningMove(eq(players[0].getSymbol().toString()), eq(move));
+        verify(board).makeMove(eq(players[0].getSymbol().toString()), eq(move));
     }
 }

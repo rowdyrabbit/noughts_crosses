@@ -19,7 +19,7 @@ public interface Board {
      * @param move the x,y coordinates of a position on the board
      * @return true if the supplied move won the game, otherwise false.
      */
-    public boolean isWinningMove(String symbolString, Move move);
+    public boolean makeMove(String symbolString, Move move);
 
     /**
      * Determines whether the board is full.
@@ -27,5 +27,7 @@ public interface Board {
      * @return true if all positions on the board are occupied, false otherwise
      */
     public boolean isFull();
+
+    public Move getComputerMove(TicTacToeBoard.BoardSymbol symbol);
 
 }

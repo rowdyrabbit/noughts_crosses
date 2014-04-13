@@ -30,7 +30,7 @@ public class TicTacToeBoardTest {
 
     @Test(expected=TicTacToeBoard.PositionAlreadyTakenException.class)
     public void aMoveWithCoordinatesThatAreAlreadyOccupiedShouldNotBeValid() {
-        board.isWinningMove("X", new Move(0,0));
+        board.makeMove("X", new Move(0, 0));
         assertThat(board.isValidMove(new Move(0, 0)), is(false));
     }
 
@@ -38,7 +38,7 @@ public class TicTacToeBoardTest {
     public void boardShouldBeFullOnceAllPositionsTaken() {
         for (int i=0; i<3; i++) {
             for (int j = 0; j < 3; j++) {
-                board.isWinningMove("X", new Move(i,j));
+                board.makeMove("X", new Move(i, j));
             }
         }
         assertTrue(board.isFull());
@@ -48,33 +48,33 @@ public class TicTacToeBoardTest {
     public void shouldReturnTrueWhenVerticalWinOccurs() {
         for (int i=0; i<3; i++) {
             board = new TicTacToeBoard();
-            board.isWinningMove("X", new Move(0,0));
-            board.isWinningMove("X", new Move(1,1));
-            assertTrue(board.isWinningMove("X", new Move(2, 2)));
+            board.makeMove("X", new Move(0, 0));
+            board.makeMove("X", new Move(1, 1));
+            assertTrue(board.makeMove("X", new Move(2, 2)));
         }
     }
 
     @Test
     public void shouldReturnTrueWhenHorizontalWinOccurs() {
         board = new TicTacToeBoard();
-        board.isWinningMove("X", new Move(0,0));
-        board.isWinningMove("X", new Move(1,1));
-        assertTrue(board.isWinningMove("X", new Move(2, 2)));
+        board.makeMove("X", new Move(0, 0));
+        board.makeMove("X", new Move(1, 1));
+        assertTrue(board.makeMove("X", new Move(2, 2)));
     }
 
     @Test
     public void shouldReturnTrueWhenDiagonalWinOccurs() {
         board = new TicTacToeBoard();
-        board.isWinningMove("X", new Move(0, 0));
-        board.isWinningMove("X", new Move(1, 1));
-        assertTrue(board.isWinningMove("X", new Move(2, 2)));
+        board.makeMove("X", new Move(0, 0));
+        board.makeMove("X", new Move(1, 1));
+        assertTrue(board.makeMove("X", new Move(2, 2)));
     }
 
     @Test
     public void shouldReturnTrueWhenBackwardsDiagonalWinOccurs() {
         board = new TicTacToeBoard();
-        board.isWinningMove("X", new Move(0, 2));
-        board.isWinningMove("X", new Move(1, 1));
-        assertTrue(board.isWinningMove("X", new Move(2, 0)));
+        board.makeMove("X", new Move(0, 2));
+        board.makeMove("X", new Move(1, 1));
+        assertTrue(board.makeMove("X", new Move(2, 0)));
     }
 }

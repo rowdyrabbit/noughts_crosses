@@ -49,7 +49,7 @@ public class TicTacToeGame implements Game {
         final int y = move.getY();
         if (board.isValidMove(move)) {
 
-            if (board.isWinningMove(getCurrentPlayer().getSymbol(), move)) {
+            if (board.makeMove(getCurrentPlayer().getSymbol(), move)) {
                 winner = getCurrentPlayer();
             } else {
                 swapPlayers();
@@ -62,9 +62,8 @@ public class TicTacToeGame implements Game {
      */
     @Override
     public void executeComputerMove() {
-        System.out.println("TODO: EXECUTE A COMPUTER MOVE");
-        //We have access to the board object here so we can assess the current state
-        swapPlayers();
+        Move computerMove = board.getComputerMove(TicTacToeBoard.BoardSymbol.X);
+        execute(computerMove);
     }
 
     /**

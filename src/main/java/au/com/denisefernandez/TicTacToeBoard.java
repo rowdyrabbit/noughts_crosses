@@ -39,11 +39,11 @@ public class TicTacToeBoard implements Board {
     }
 
     /**
-     * @see Board#isWinningMove(String, Move)
+     * @see Board#makeMove(String, Move)
      *
      */
     @Override
-    public boolean isWinningMove(String symbolString, Move move) {
+    public boolean makeMove(String symbolString, Move move) {
         BoardSymbol symbol = BoardSymbol.valueOf(symbolString);
         int x = move.getX();
         int y = move.getY();
@@ -58,7 +58,7 @@ public class TicTacToeBoard implements Board {
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             if (board[i][y] == symbol) {
-               horizontalCount++;
+                horizontalCount++;
             }
             if (board[x][i] == symbol) {
                 verticalCount++;
@@ -76,6 +76,43 @@ public class TicTacToeBoard implements Board {
         } else {
             return false;
         }
+
+
+    }
+
+    public Move getComputerMove(BoardSymbol symbol) {
+        BoardSymbol oppositeSymbol = symbol.getOppositeSymbol();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == BoardSymbol.Empty) {
+                    Move move = new Move(i, j);
+                    if (isWinningMove(symbol, move)) {
+                        return move;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == BoardSymbol.Empty) {
+                    Move move = new Move(i, j);
+                    if (isWinningMove(oppositeSymbol, move)) {
+                        return move;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == BoardSymbol.Empty) {
+                    return new Move(i, j);
+                }
+            }
+        }
+
+        throw new BoardFullException();
     }
 
     /**
@@ -104,6 +141,25 @@ public class TicTacToeBoard implements Board {
         return builder.toString();
     }
 
+    private boolean isWinningMove(BoardSymbol symbol, Move move) {
+       boolean isWinner = makeMove(symbol.name(), move);
+       //undo the move
+       board[move.getX()][move.getY()] = BoardSymbol.Empty;
+        numberOfMoves--;
+       return isWinner;
+    }
+
+
+
+
+    private  BoardSymbol[][] copyCurrentBoardState() {
+        BoardSymbol[][] copyBoard = new BoardSymbol[BOARD_SIZE][BOARD_SIZE];
+        for (int i = 0; i < board.length; i++) {
+            System.arraycopy(board[i], 0, copyBoard[i], 0, board[i].length);
+        }
+        System.out.println(copyBoard);
+        return copyBoard;
+    }
 
     private void fillBoardWithEmptySymbols() {
         for (BoardSymbol[] row : board) {
@@ -121,6 +177,22 @@ public class TicTacToeBoard implements Board {
             public String toString() {
                 return " ";
             }
+
+        };
+        public BoardSymbol getOppositeSymbol() {
+            if (BoardSymbol.X == this) {
+                return BoardSymbol.O;
+            } else if (BoardSymbol.O == this) {
+                return BoardSymbol.X;
+            } else {
+                return BoardSymbol.Empty;
+            }
+        }
+    }
+
+    public class BoardFullException extends RuntimeException {
+        public BoardFullException() {
+            super("The board was full");
         }
     }
 
